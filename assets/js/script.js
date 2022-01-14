@@ -1,23 +1,165 @@
-function getWeather(){
-    if(city == "union")
+function getWeather() {
+    city = selectedEl.value;
+    console.log(city);
+    // console.log(town);
+    weathboardAPI = weatherboardApiLink + city + apiKey;
     fetch(weathboardAPI)
-    .then(function (response){
+    .then(function (response) {
         return response.json();
-    })
-    .then(function (data){
-        
-    })
-}
+      })
+      .then(function (data){
+        temp.innerHTML = data.main.temp;
+        humidity.innerHTML = data.main.humidity;
+        windSpeed.innerHTML = data.wind.speed;
 
-var selectedEl = $("#search-city");
+        let lat = data.coord.lat;
+        let lon = data.coord.lon;
+        getUV(lat, lon);
+        getForecast(city);
+      })
+}
+function getUV (lat, lon){
+    let uvURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
+    + lat + "&lon=" + lon + apiKey2;
+    console.log(lat);
+    console.log(lon);
+    //https://api.openweathermap.org/data/2.5/onecall?lat=48.8534&lon=2.3488&appid=3c3fe44616a0a33f54223a0fa29fe9b2
+    fetch(uvURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data){
+            uvIndex.innerHTML = data.current.uvi;
+        })
+    
+}
+function getForecast(city){
+    let forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey2;
+    console.log(forecastURL);
+    fetch(forecastURL)
+    .then((response) => response.json())
+    .then((data) => {
+      for (let i = 0; i < data.list.length; i++) {
+        if (data.list[i].dt_txt.indexOf("18:00:00") !== -1) {
+          console.log(data.list[i]);
+
+          currentDate.innerHTML = data.list[0].dt_txt.substr(0, 10);
+
+          firstDayDate.innerHTML = data.list[7].dt_txt.substr(0, 10);
+          firstTempDate.innerHTML = `${data.list[7].main.temp}°F`;
+          firstWindDate.innerHTML = data.list[7].wind.speed;
+          firstHumidityDate.innerHTML = data.list[7].main.humidity;
+          const iconCode = data.list[7].weather[0].icon;
+          const iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+          $('#Img0').attr('src', iconUrl);
+
+          secondDayDate.innerHTML = data.list[15].dt_txt.substr(0, 10);
+          secondTempDate.innerHTML = `${data.list[15].main.temp}°F`;
+          secondWindDate.innerHTML = data.list[15].wind.speed;
+          secondHumidityDate.innerHTML = data.list[15].main.humidity;
+          const iconCodeOne = data.list[15].weather[0].icon;
+          const iconUrlOne = "http://openweathermap.org/img/w/" + iconCodeOne + ".png";
+          $('#Img1').attr('src', iconUrlOne);
+
+          thirdDayDate.innerHTML = data.list[23].dt_txt.substr(0, 10);
+          thirdTempDate.innerHTML = `${data.list[23].main.temp}°F`;
+          thirdWindDate.innerHTML = data.list[23].wind.speed;
+          thirdHumidityDate.innerHTML = data.list[23].main.humidity;
+          const iconCodeTwo = data.list[23].weather[0].icon;
+          const iconUrlTwo = "http://openweathermap.org/img/w/" + iconCodeTwo + ".png";
+          $('#Img2').attr('src', iconUrlTwo);
+
+          fourthDayDate.innerHTML = data.list[31].dt_txt.substr(0, 10);
+          fourthTempDate.innerHTML = `${data.list[31].main.temp}°F`;
+          fourthWindDate.innerHTML = data.list[31].wind.speed;
+          fourthHumidityDate.innerHTML = data.list[31].main.humidity;
+          const iconCodeThree = data.list[31].weather[0].icon;
+          const iconUrlThree = "http://openweathermap.org/img/w/" + iconCodeThree + ".png";
+          $('#Img3').attr('src', iconUrlThree);
+
+          fifthDayDate.innerHTML = data.list[39].dt_txt.substr(0, 10);
+          fifthTempDate.innerHTML = `${data.list[39].main.temp}°F`;
+          fifthWindDate.innerHTML = data.list[39].wind.speed;
+          fifthHumidityDate.innerHTML = data.list[39].main.humidity;
+          const iconCodeFour = data.list[39].weather[0].icon;
+          const iconUrlFour = "http://openweathermap.org/img/w/" + iconCodeFour + ".png";
+          $('#Img4').attr('src', iconUrlFour);
+        }
+      }
+    });
+};
+
+
+//DOM element declarations
 var cityChosen = document.getElementById("current-city");
 var temp = document.getElementById("temperature");
 var humidity = document.getElementById("humidity");
 var windSpeed = document.getElementById("wind-speed");
 var uvIndex = document.getElementById("uv");
+const submitBtn = document.querySelector("#search-button");
+const selectedEl = document.querySelector("#search-city");
+const listHistory = document.querySelector(".list-group");
+const cityImageMain = document.querySelector("current-weather");
+const currentDate = document.querySelector("#current-city-date");
+const firstDayDate = document.querySelector("#Date0");
+const firstImgDate = document.querySelector("#Img0");
+const firstTempDate = document.querySelector("#Temp0");
+const firstWindDate = document.querySelector("#Wind0");
+const firstHumidityDate = document.querySelector("#Humidity0");
+const secondDayDate = document.querySelector("#Date1");
+const secondImgDate = document.querySelector("#Img1");
+const secondTempDate = document.querySelector("#Temp1");
+const secondWindDate = document.querySelector("#Wind1");
+const secondHumidityDate = document.querySelector("#Humidity1");
+const thirdDayDate = document.querySelector("#Date2");
+const thirdImgDate = document.querySelector("#Img2");
+const thirdTempDate = document.querySelector("#Temp2");
+const thirdWindDate = document.querySelector("#Wind2");
+const thirdHumidityDate = document.querySelector("#Humidity2");
+const fourthDayDate = document.querySelector("#Date3");
+const fourthImgDate = document.querySelector("#Img3");
+const fourthTempDate = document.querySelector("#Temp3");
+const fourthWindDate = document.querySelector("#Wind3");
+const fourthHumidityDate = document.querySelector("#Humidity3");
+const fifthDayDate = document.querySelector("#Date4");
+const fifthImgDate = document.querySelector("#Img4");
+const fifthTempDate = document.querySelector("#Temp4");
+const fifthWindDate = document.querySelector("#Wind4");
+const fifthHumidityDate = document.querySelector("#Humidity4");
+
+const citiesHistory = JSON.parse(localStorage.getItem("history")) || [];
+
+const searchHistory = (event) => {
+    event.preventDefault();
+    const city = event.target.innerHTML;
+    getWeatherData(city);
+  };
+  
+  const loadHistory = () => {
+    listHistory.innerHTML = "";
+    for (let i = 0; i < citiesHistory.length; i++) {
+      const li = document.createElement("li");
+      const button = document.createElement("button");
+      button.innerHTML = citiesHistory[i];
+      button.addEventListener("click", searchHistory);
+      li.append(button);
+      listHistory.append(li);
+    }
+  };
+  
+  loadHistory();
+
+
 var cityArray = [];
 
-var weatherboardApiLink = "api.openweathermap.org/data/2.5"
-var city = "union"
-var APIKey = "&appid=3c3fe44616a0a33f54223a0fa29fe9b2";
-var weathboardAPI = weatherboardApiLink + city + APIkey;
+
+var weatherboardApiLink = "https://api.openweathermap.org/data/2.5/weather?q=";
+var city = "paris";
+var apiKey = "&units=imperial&appid=3c3fe44616a0a33f54223a0fa29fe9b2";
+var apiKey2 = "&appid=3c3fe44616a0a33f54223a0fa29fe9b2";
+let weathboardAPI = weatherboardApiLink + city + apiKey;
+// https://api.openweathermap.org/data/2.5/weather?q=Union&units=imperial&appid=3c3fe44616a0a33f54223a0fa29fe9b2
+getWeather();
+
+
+submitBtn.addEventListener("click", getWeather);
