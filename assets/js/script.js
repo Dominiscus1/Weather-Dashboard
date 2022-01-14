@@ -1,3 +1,4 @@
+
 function getWeather() {
     city = selectedEl.value;
     console.log(city);
@@ -88,6 +89,23 @@ function getForecast(city){
       }
     });
 };
+const searchHistory = (event) => {
+    event.preventDefault();
+    const city = event.target.innerHTML;
+    getWeatherData();
+  };
+  
+  const loadHistory = () => {
+    listHistory.innerHTML = "";
+    for (let i = 0; i < citiesHistory.length; i++) {
+      const li = document.createElement("li");
+      const button = document.createElement("button");
+      button.innerHTML = citiesHistory[i];
+      button.addEventListener("click", searchHistory);
+      li.append(button);
+      listHistory.append(li);
+    }
+  };
 
 
 //DOM element declarations
@@ -129,25 +147,6 @@ const fifthHumidityDate = document.querySelector("#Humidity4");
 
 const citiesHistory = JSON.parse(localStorage.getItem("history")) || [];
 
-const searchHistory = (event) => {
-    event.preventDefault();
-    const city = event.target.innerHTML;
-    getWeatherData(city);
-  };
-  
-  const loadHistory = () => {
-    listHistory.innerHTML = "";
-    for (let i = 0; i < citiesHistory.length; i++) {
-      const li = document.createElement("li");
-      const button = document.createElement("button");
-      button.innerHTML = citiesHistory[i];
-      button.addEventListener("click", searchHistory);
-      li.append(button);
-      listHistory.append(li);
-    }
-  };
-  
-  loadHistory();
 
 
 var cityArray = [];
@@ -163,3 +162,6 @@ getWeather();
 
 
 submitBtn.addEventListener("click", getWeather);
+
+  
+  loadHistory();
