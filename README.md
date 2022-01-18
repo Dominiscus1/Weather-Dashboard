@@ -1,5 +1,4 @@
 # Weather Dashboard
-[![License Badge]()]()
   ## Table of Contents
   - [Description](#Description)
   - [Installations](#Installations)
@@ -25,6 +24,5 @@
   Anthony Jimenez
 
   ## License
-  [![License Badge]()]()
   </br>
   This application uses No License license. 
