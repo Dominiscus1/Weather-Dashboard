@@ -1,8 +1,10 @@
-
-function getWeather() {
+function getCity(){
     city = selectedEl.value;
-    console.log(city);
-    // console.log(town);
+    // console.log("get city city is " + city);
+    getWeather(city);
+}
+function getWeather(city) {
+    // console.log("get weather city is " + city);
     weathboardAPI = weatherboardApiLink + city + apiKey;
     fetch(weathboardAPI)
     .then(function (response) {
@@ -17,13 +19,17 @@ function getWeather() {
         let lon = data.coord.lon;
         getUV(lat, lon);
         getForecast(city);
+        if (citiesHistory.indexOf(city) === -1) {
+            citiesHistory.push(city);
+            localStorage.setItem("history", JSON.stringify(citiesHistory));
+            loadHistory();}
       })
 }
 function getUV (lat, lon){
     let uvURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
     + lat + "&lon=" + lon + apiKey2;
-    console.log(lat);
-    console.log(lon);
+    // console.log(lat);
+    // console.log(lon);
     //https://api.openweathermap.org/data/2.5/onecall?lat=48.8534&lon=2.3488&appid=3c3fe44616a0a33f54223a0fa29fe9b2
     fetch(uvURL)
         .then(function (response) {
@@ -35,14 +41,14 @@ function getUV (lat, lon){
     
 }
 function getForecast(city){
-    let forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey2;
-    console.log(forecastURL);
+    let forecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey;
+    // console.log(forecastURL);
     fetch(forecastURL)
     .then((response) => response.json())
     .then((data) => {
       for (let i = 0; i < data.list.length; i++) {
         if (data.list[i].dt_txt.indexOf("18:00:00") !== -1) {
-          console.log(data.list[i]);
+        //   console.log(data.list[i]);
 
           currentDate.innerHTML = data.list[0].dt_txt.substr(0, 10);
 
@@ -91,8 +97,9 @@ function getForecast(city){
 };
 const searchHistory = (event) => {
     event.preventDefault();
-    const city = event.target.innerHTML;
-    getWeatherData();
+    city = event.target.innerHTML;
+    // console.log("city in search history is " + city);
+    getWeather(city);
   };
   
   const loadHistory = () => {
@@ -158,10 +165,5 @@ var apiKey = "&units=imperial&appid=3c3fe44616a0a33f54223a0fa29fe9b2";
 var apiKey2 = "&appid=3c3fe44616a0a33f54223a0fa29fe9b2";
 let weathboardAPI = weatherboardApiLink + city + apiKey;
 // https://api.openweathermap.org/data/2.5/weather?q=Union&units=imperial&appid=3c3fe44616a0a33f54223a0fa29fe9b2
-getWeather();
-
-
-submitBtn.addEventListener("click", getWeather);
-
-  
-  loadHistory();
+loadHistory();
+submitBtn.addEventListener("click", getCity);
