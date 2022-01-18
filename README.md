@@ -25,4 +25,4 @@
 
   ## License
   </br>
-  This application uses No License license. 
+  This application uses No license. 
